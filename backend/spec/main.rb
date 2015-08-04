@@ -5,7 +5,7 @@ RSpec.describe 'parsing' do
   def run(inp)
     Parser.new(inp).()
   end
-  it {expect { run('a =') }.to raise_error(Racc::ParseError)}
+  it {expect { run('a =') }.to_not raise_error(Racc::ParseError)}
   it {expect(run('a[b]')).to eq('a[b]')}
   it {expect(run('!a && b')).to eq('((! a) and b)')}
   it {expect(run('not a && b')).to eq('(! (a and b))')}
