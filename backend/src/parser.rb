@@ -1,16 +1,25 @@
 require 'ruby_parser'
 require 'pry'
 class Parser
-  attr_accessor :current_output, :root_node, :debug_mode
+  attr_accessor :current_output, :root_node, :debug_mode, :errors
 
   def initialize(input, debug_mode=false)
     self.current_output = ""
-    self.root_node = RubyParser.new.parse(input)
     self.debug_mode = debug_mode
+    begin
+      self.root_node = RubyParser.new.parse(input)
+      self.errors = nil
+    rescue Racc::ParseError => e
+      self.errors = e.message
+    end
   end
 
   def call
-    resolve(root_node)
+    if errors
+      ''
+    else
+      resolve(root_node)
+    end
   end
 
   def is_lit?(node)

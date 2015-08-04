@@ -1,0 +1,56 @@
+<html>
+<head>
+</head>
+<body>
+  <div id='1'>
+    <div id='2'>
+      <textarea id='3'></textarea>
+      <div id='error-output'>
+      </div>
+      <div id='4'>
+      </div>
+    </div>
+  </div>
+<script>
+ var input, output, changedFunc, xmlhttp, errorOutput;
+ input = document.getElementById('3');
+ output = document.getElementById('4');
+ errorOutput = document.getElementById('error-output');
+ changedFunc = function() {
+    if (xmlhttp)
+      xmlhttp.abort();
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        var res = JSON.parse(xmlhttp.response);
+        output.innerHTML=res.value;
+        if (res.error) {
+          input.className = 'error';
+        } else {
+          input.className = 'success';
+        }
+        errorOutput.innerHTML = res.error;
+      }
+    };
+    xmlhttp.open("GET", "q?" + encodeURI(input.value));
+    xmlhttp.send();
+  };
+
+ // Init
+ input.oninput = changedFunc;
+</script>
+<style type="text/css">
+  body {
+    text-align: center;
+  }
+  #1 {
+    display: none;
+  }
+  textarea {
+    width: 66%;
+    height: 20%;
+    display: block;
+  }
+</style>
+</body>
+</html>
